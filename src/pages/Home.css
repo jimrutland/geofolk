@@ -1,0 +1,12 @@
+ion-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-family: 'Coustard', serif;
+    font-size: 30px;
+}
+
+ion-button {
+    font-family: 'Cinzel Decorative', cursive;
+    font-family: 'Coustard', serif;
+    text-transform: capitalize;
+    font-size: 20px;
+}
