@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import GoogleMapReact, { MapOptions } from 'google-map-react';
+import GoogleMapReact, { MapOptions, ClickEventValue } from 'google-map-react';
+
+export interface MarkerCoords {
+    lat: number;
+    lng: number;
+}
 
 const Map = (props: any) => {
     const [center, setCenter] = useState({lat: 11.0168, lng: 76.9558 });
     const [zoom, setZoom] = useState(11);
+    const [map, setMap] = useState({});
+    const [maps, setMaps] = useState({});
+    const [markers, setMarkers] = useState([] as MarkerCoords[]);
+
     const mapOptions: MapOptions = {
         backgroundColor: 'gray',
         styles: [
@@ -87,6 +96,23 @@ const Map = (props: any) => {
             }
         ]
     };
+    
+    function handleApiLoaded(map: GoogleMapReact, maps: GoogleMapReact[]) {
+        setMap(map);
+        setMaps(maps);
+    }
+
+    function mapClick(event: ClickEventValue) {
+        const markerCoord: MarkerCoords = {
+            lat: event.lat,
+            lng: event.lng
+        };
+        setMarkers([
+            ...markers,
+            markerCoord
+        ])
+    }
+
     return (
         <div style={{ height: '100%', width: '100%' }}>
         <GoogleMapReact
@@ -94,6 +120,9 @@ const Map = (props: any) => {
           defaultCenter={center}
           defaultZoom={zoom}
           options={mapOptions}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+          onClick={mapClick}
         >
         </GoogleMapReact>
       </div>
