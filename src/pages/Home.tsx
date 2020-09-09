@@ -1,25 +1,24 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from '@ionic/react';
-import { addSharp } from 'ionicons/icons';
+import { IonContent, IonHeader, IonPage} from '@ionic/react';
 import React from 'react';
-import ExploreContainer from '../components/ExploreContainer';
+import Map from '../components/Map';
 import './Home.css';
+import Toolbar from '../components/Toolbar';
+import ActionMenu from '../components/ActionMenu';
+import { menuController } from "@ionic/core";
 
 const Home: React.FC = () => {
+  function toggleMenu() {
+    menuController.open();
+  }
+
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="dark">
-          <IonTitle>GeoFolk</IonTitle>
-          <IonButtons slot="primary">
-            <IonButton>
-              Add Your Folktale
-              <IonIcon slot="start" icon={addSharp} />
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
+        <Toolbar openMenu={toggleMenu}></Toolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <ExploreContainer />
+        <Map />
+        <ActionMenu />
       </IonContent>
     </IonPage>
   );
