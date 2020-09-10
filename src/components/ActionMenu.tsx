@@ -1,23 +1,25 @@
 import React from 'react';
-import { IonContent, IonList, IonMenu, IonHeader, IonToolbar, IonTitle, IonIcon, IonLabel, IonItem, IonButtons } from '@ionic/react';
+import { IonContent, IonList, IonMenu, IonHeader, IonToolbar, IonTitle, IonIcon, IonLabel, IonItem, IonButtons, IonButton } from '@ionic/react';
 import { addSharp } from 'ionicons/icons';
 
-const ActionMenu = () => {
+interface ActionMenuProperties {
+  setIsAddingStory(isAdding: boolean): void;
+}
+
+const ActionMenu = (props: ActionMenuProperties) => {
 
   return (
-    <IonMenu side="start" contentId="main-content">
-      <IonContent>
-        <IonList id="main-content">
-          <IonItem>
-            <IonButtons>
-              <IonIcon
-                size="large" 
-                icon={addSharp} 
-                color="white"></IonIcon>
-            </IonButtons>
-            <IonLabel class="menuItems">Add A Story</IonLabel>
-          </IonItem>
-        </IonList>
+    <IonMenu side="start" menuId="custom" contentId="main-content">
+      <IonContent id="main-content">
+        <IonButton color="black" expand="full" onClick={() => { props.setIsAddingStory(true)}}>
+          <IonLabel>Add A Story</IonLabel>
+          <IonIcon
+            slot="end"
+            class="menuIcon"
+            size="large" 
+            icon={addSharp} 
+            color="white" />
+        </IonButton>
       </IonContent>
     </IonMenu>
   );

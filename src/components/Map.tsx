@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import GoogleMapReact, { MapOptions, ClickEventValue } from 'google-map-react';
+import { IonIcon } from '@ionic/react';
+import { brushOutline } from 'ionicons/icons';
 
 export interface MarkerCoords {
     lat: number;
     lng: number;
 }
 
-const Map = (props: any) => {
+const Marker = ({ children }: any) => children;
+
+interface MapProperties {
+    isAddingStory: boolean;
+    setIsAddingStory(isAdding: boolean): void;
+}
+
+const Map = (props: MapProperties) => {
     const [center, setCenter] = useState({lat: 11.0168, lng: 76.9558 });
     const [zoom, setZoom] = useState(11);
     const [map, setMap] = useState({});
@@ -103,29 +112,38 @@ const Map = (props: any) => {
     }
 
     function mapClick(event: ClickEventValue) {
-        const markerCoord: MarkerCoords = {
-            lat: event.lat,
-            lng: event.lng
-        };
-        setMarkers([
-            ...markers,
-            markerCoord
-        ])
+        console.log(props.isAddingStory);
+        if (props.isAddingStory) {
+            const markerCoord: MarkerCoords = {
+                lat: event.lat,
+                lng: event.lng
+            };
+            setMarkers([
+                ...markers,
+                markerCoord
+            ]);
+            props.setIsAddingStory(false);
+        }
     }
 
     return (
         <div style={{ height: '100%', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyC4NGd-0bVVXw6GwXHXhFlfh8-w9ck9S9k' }}
-          defaultCenter={center}
-          defaultZoom={zoom}
-          options={mapOptions}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-          onClick={mapClick}
-        >
-        </GoogleMapReact>
-      </div>
+            <GoogleMapReact
+                bootstrapURLKeys={{ key: 'AIzaSyC4NGd-0bVVXw6GwXHXhFlfh8-w9ck9S9k' }}
+                defaultCenter={center}
+                defaultZoom={zoom}
+                options={mapOptions}
+                yesIWantToUseGoogleMapApiInternals
+                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+                onClick={mapClick}
+                >
+                {markers.map(marker => {
+                    return (<Marker lat={marker.lat} lng={marker.lng}>
+                        <IonIcon size="large" icon={brushOutline}></IonIcon>
+                    </Marker>);
+                })}
+            </GoogleMapReact>
+        </div>
     );
 }
 

@@ -10,12 +10,9 @@ ion-button {
     text-transform: capitalize;
     font-size: 20px;
 }
-
-.menuItems {
-    font-size: 20px !important;
+.menuIcon { 
     margin-left: 15px;
 }
-
 #menuButton {
     margin-left:15px;
 }
