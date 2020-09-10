@@ -8,8 +8,10 @@ import { menuController } from "@ionic/core";
 
 const Home: React.FC = () => {
   const [isAddingStory, setIsAddingStory] = useState(false);
-  async function toggleMenu() {
-    await menuController.open();
+  const [mapCursor, setMapCursor] = useState("");
+
+  function toggleMenu() {
+    menuController.toggle();
   }
 
   return (
@@ -18,8 +20,8 @@ const Home: React.FC = () => {
         <Toolbar openMenu={toggleMenu}></Toolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <Map isAddingStory={isAddingStory} setIsAddingStory={setIsAddingStory}/>
-        <ActionMenu setIsAddingStory={setIsAddingStory}/>
+        <Map mapCursor={mapCursor} isAddingStory={isAddingStory} setIsAddingStory={setIsAddingStory}/>
+        <ActionMenu setIsAddingStory={setIsAddingStory} toggleMenu={toggleMenu}/>
       </IonContent>
     </IonPage>
   );

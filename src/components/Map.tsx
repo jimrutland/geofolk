@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import GoogleMapReact, { MapOptions, ClickEventValue } from 'google-map-react';
-import { IonIcon } from '@ionic/react';
-import { brushOutline } from 'ionicons/icons';
+import GoogleMapReact, { MapOptions, ClickEventValue, Coords } from 'google-map-react';
+import { IonIcon, IonButton } from '@ionic/react';
+import { brushOutline, pencilSharp } from 'ionicons/icons';
 
 export interface MarkerCoords {
     lat: number;
@@ -13,16 +13,17 @@ const Marker = ({ children }: any) => children;
 interface MapProperties {
     isAddingStory: boolean;
     setIsAddingStory(isAdding: boolean): void;
+    mapCursor: string;
 }
 
 const Map = (props: MapProperties) => {
-    const [center, setCenter] = useState({lat: 11.0168, lng: 76.9558 });
+    const [center, setCenter] = useState({lat: 11.0168, lng: 76.9558 } as Coords);
     const [zoom, setZoom] = useState(11);
     const [map, setMap] = useState({});
     const [maps, setMaps] = useState({});
-    const [markers, setMarkers] = useState([] as MarkerCoords[]);
+    const [markers, setMarkers] = useState([] as Coords[]);
 
-    const mapOptions: MapOptions = {
+    const [mapOptions, setMapOptions] = useState({
         backgroundColor: 'gray',
         styles: [
             { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
@@ -103,16 +104,11 @@ const Map = (props: MapProperties) => {
                 elementType: "labels.text.stroke",
                 stylers: [{ color: "#17263c" }]
             }
-        ]
-    };
-    
-    function handleApiLoaded(map: GoogleMapReact, maps: GoogleMapReact[]) {
-        setMap(map);
-        setMaps(maps);
-    }
+        ],
+        draggableCursor: ""
+    } as MapOptions);
 
-    function mapClick(event: ClickEventValue) {
-        console.log(props.isAddingStory);
+    function addStory(event: ClickEventValue) {
         if (props.isAddingStory) {
             const markerCoord: MarkerCoords = {
                 lat: event.lat,
@@ -122,24 +118,32 @@ const Map = (props: MapProperties) => {
                 ...markers,
                 markerCoord
             ]);
+            setCenter({lat: event.lat, lng: event.lng});
             props.setIsAddingStory(false);
         }
     }
+
+    React.useEffect(() => {
+        setMapOptions({
+            ...mapOptions,
+            draggableCursor: (props.isAddingStory) ? "pointer" : ""
+        });
+    }, [props.isAddingStory]);
 
     return (
         <div style={{ height: '100%', width: '100%' }}>
             <GoogleMapReact
                 bootstrapURLKeys={{ key: 'AIzaSyC4NGd-0bVVXw6GwXHXhFlfh8-w9ck9S9k' }}
                 defaultCenter={center}
+                center={center}
                 defaultZoom={zoom}
+                zoom={zoom}
                 options={mapOptions}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-                onClick={mapClick}
+                onClick={addStory}
                 >
-                {markers.map(marker => {
-                    return (<Marker lat={marker.lat} lng={marker.lng}>
-                        <IonIcon size="large" icon={brushOutline}></IonIcon>
+                {markers.map((marker, index) => {
+                    return (<Marker key={index} lat={marker.lat} lng={marker.lng}>
+                            <IonIcon slot="icon-only" style={{fontSize: "24px", padding:"10px", backgroundColor: "black", borderRadius:"50px"}} icon={pencilSharp}></IonIcon>
                     </Marker>);
                 })}
             </GoogleMapReact>
