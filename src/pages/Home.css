@@ -11,8 +11,21 @@ ion-button {
     font-size: 20px;
 }
 
-.storyIcon {
-    font-size: 64px;
+#storyCard {
+    position: absolute;
+    right: 5%;
+    top: 56px;
+    width: 30%;
+    height: 45%;
+}
+
+#storyCard > ion-header {
+    padding: 15px;
+}
+
+#storyCard > ion-header > ion-card-title {
+    font-size: 30px;
+    text-align: center;
 }
 
 #menuButton {
