@@ -4,13 +4,12 @@ import { IonIcon } from '@ionic/react';
 import { pencilSharp } from 'ionicons/icons';
 import { useRecoilState } from 'recoil';
 import { shouldRemoveCurrentMarker } from '../RecoilStates/MarkerState';
-import { addingStoryState } from '../RecoilStates/StoryCardState';
+import { addingStoryState, showingStoryCard } from '../RecoilStates/StoryCardState';
 import { defaultMapOptions } from './MapOptions';
 
 const Marker = ({ children }: any) => children;
 
 interface MapProperties {
-    setShowStoryCard(show: boolean): void;
     mapCursor: string;
 }
 
@@ -20,6 +19,8 @@ const Map = (props: MapProperties) => {
     const [markers, setMarkers] = useState([] as Coords[]);
     const [removeCurrentMarker, setRemoveCurrentMarker] = useRecoilState(shouldRemoveCurrentMarker);
     const [isAddingStory, setIsAddingStory] = useRecoilState(addingStoryState);
+    const [showStoryCard, setShowStoryCard] = useRecoilState(showingStoryCard);
+    
     let currentMarker = {} as Coords;
 
     const [mapOptions, setMapOptions] = useState(defaultMapOptions);
@@ -35,14 +36,14 @@ const Map = (props: MapProperties) => {
                 markerCoord
             ]);
             currentMarker = markerCoord;
-            props.setShowStoryCard(true);
+            setShowStoryCard(true);
             setCenter({lat: event.lat, lng: event.lng});
             setIsAddingStory(false);
         }
     }
 
     function displayStoryCard(): void {
-        props.setShowStoryCard(true);
+        setShowStoryCard(true);
     }
 
     React.useEffect(() => {
