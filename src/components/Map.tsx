@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import GoogleMapReact, { MapOptions, ClickEventValue, Coords } from 'google-map-react';
 import { IonIcon } from '@ionic/react';
 import { pencilSharp } from 'ionicons/icons';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { shouldRemoveCurrentMarker } from '../RecoilStates/MarkerState';
 import { addingStoryState, showingStoryCard } from '../RecoilStates/StoryCardState';
 import { defaultMapOptions } from './MapOptions';
@@ -19,7 +19,7 @@ const Map = (props: MapProperties) => {
     const [markers, setMarkers] = useState([] as Coords[]);
     const [removeCurrentMarker, setRemoveCurrentMarker] = useRecoilState(shouldRemoveCurrentMarker);
     const [isAddingStory, setIsAddingStory] = useRecoilState(addingStoryState);
-    const [showStoryCard, setShowStoryCard] = useRecoilState(showingStoryCard);
+    const setShowStoryCard = useSetRecoilState(showingStoryCard);
     
     let currentMarker = {} as Coords;
 

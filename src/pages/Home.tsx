@@ -5,13 +5,13 @@ import './Home.css';
 import Toolbar from '../components/Toolbar';
 import ActionMenu from '../components/ActionMenu';
 import { menuController } from "@ionic/core";
-import { useRecoilState, atom } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { showingStoryCard } from '../RecoilStates/StoryCardState';
 import StoryCard from '../components/StoryCard';
 
 const Home: React.FC = () => {
   const [mapCursor, setMapCursor] = useState("");
-  const [showStoryCard, setShowStoryCard] = useRecoilState(showingStoryCard);
+  const showStoryCard = useRecoilValue(showingStoryCard);
 
   function toggleMenu() {
     menuController.toggle();
@@ -23,13 +23,9 @@ const Home: React.FC = () => {
         <Toolbar openMenu={toggleMenu}></Toolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <Map
-          mapCursor={mapCursor}
-          />
+        <Map mapCursor={mapCursor} />
         <ActionMenu toggleMenu={toggleMenu}/>
-        {showStoryCard ? 
-         <StoryCard />
-        : null}
+        { showStoryCard ? <StoryCard /> : null }
       </IonContent>
     </IonPage>
   );
