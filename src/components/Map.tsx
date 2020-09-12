@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import GoogleMapReact, { MapOptions, ClickEventValue, Coords } from 'google-map-react';
-import { IonIcon } from '@ionic/react';
+import { IonButton, IonIcon, IonImg } from '@ionic/react';
 import { pencilSharp } from 'ionicons/icons';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { shouldRemoveCurrentMarker } from '../RecoilStates/MarkerState';
 import { addingStoryState, showingStoryCard } from '../RecoilStates/StoryCardState';
 import { defaultMapOptions } from './MapOptions';
+import { Capacitor } from '@capacitor/core';
 
 const Marker = ({ children }: any) => children;
 
@@ -70,13 +71,18 @@ const Map = (props: MapProperties) => {
                 onClick={addStory}
                 >
                 {markers.map((marker, index) => {
-                    return (<Marker key={index} lat={marker.lat} lng={marker.lng}>
-                            <IonIcon 
-                                slot="icon-only" 
-                                style={{fontSize: "24px", padding:"10px", backgroundColor: "black", borderRadius:"50px"}}
-                                icon={pencilSharp}
+                    return (<Marker 
+                                key={index} 
+                                lat={marker.lat} 
+                                lng={marker.lng}>
+                            {<IonButton 
+                                size="small"
+                                shape="round"
+                                style={{ minWidth: "40px", maxWidth: "40px" }}
+                                color="dark"
                                 onClick={displayStoryCard}>
-                            </IonIcon>
+                                <IonImg src="assets/icon/write.png" style={{minWidth: "24px"}} />
+                            </IonButton>}
                     </Marker>);
                 })}
             </GoogleMapReact>

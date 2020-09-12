@@ -14,10 +14,10 @@ const StoryCard = () => {
             <IonCardTitle> Share Your Folktale </IonCardTitle>
           </IonHeader>
           <IonCardContent>
-              <IonItem>
+              <IonItem color="light">
                 <IonInput placeholder="Enter the name of your tale..."></IonInput>
               </IonItem>
-              <IonItem>
+              <IonItem id="storyText" color="light">
                 <IonTextarea 
                   placeholder="Tell us your tale..."
                   rows={8}></IonTextarea>

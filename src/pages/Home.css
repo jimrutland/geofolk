@@ -25,9 +25,25 @@ ion-button {
 
 #storyCard > ion-header > ion-card-title {
     font-size: 30px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-family: 'Coustard', serif;
     text-align: center;
 }
 
 #menuButton {
     margin-left:15px;
+}
+
+#storyCard ion-buttons {
+    float: right;
+    margin-top: 25px;
+}
+
+#storyCard ion-buttons {
+    float: right;
+    margin-top: 25px;
+}
+
+#storyText {
+    margin-top: 10px;
 }
