@@ -1,5 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonCard, IonCardTitle, IonCardContent, IonInput, IonTextarea, IonItem, IonItemDivider, IonButtons, IonButton} from '@ionic/react';
-import React, { useState } from 'react';
+import { IonContent, IonHeader, IonPage } from '@ionic/react';
+import React from 'react';
 import Map from '../components/Map';
 import './Home.css';
 import Toolbar from '../components/Toolbar';
@@ -10,7 +10,6 @@ import { showingStoryCard } from '../RecoilStates/StoryCardState';
 import StoryCard from '../components/StoryCard';
 
 const Home: React.FC = () => {
-  const [mapCursor, setMapCursor] = useState("");
   const showStoryCard = useRecoilValue(showingStoryCard);
 
   function toggleMenu() {
@@ -23,7 +22,7 @@ const Home: React.FC = () => {
         <Toolbar openMenu={toggleMenu}></Toolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <Map mapCursor={mapCursor} />
+        <Map />
         <ActionMenu toggleMenu={toggleMenu}/>
         { showStoryCard ? <StoryCard /> : null }
       </IonContent>

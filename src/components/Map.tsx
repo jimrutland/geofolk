@@ -1,44 +1,38 @@
 import React, { useState } from 'react';
-import GoogleMapReact, { MapOptions, ClickEventValue, Coords } from 'google-map-react';
-import { IonButton, IonIcon, IonImg } from '@ionic/react';
-import { pencilSharp } from 'ionicons/icons';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import GoogleMapReact, { ClickEventValue, Coords } from 'google-map-react';
+import { IonButton, IonImg } from '@ionic/react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { shouldRemoveCurrentMarker } from '../RecoilStates/MarkerState';
 import { addingStoryState, showingStoryCard } from '../RecoilStates/StoryCardState';
 import { defaultMapOptions } from './MapOptions';
-import { Capacitor } from '@capacitor/core';
+import NavigateToLocationButton from './NavigateToLocationButton';
+import { userLocation } from '../RecoilStates/UserLocation';
+import { zoom } from '../RecoilStates/Zoom';
 
 const Marker = ({ children }: any) => children;
 
-interface MapProperties {
-    mapCursor: string;
-}
-
-const Map = (props: MapProperties) => {
-    const [center, setCenter] = useState({lat: 11.0168, lng: 76.9558 } as Coords);
-    const [zoom, setZoom] = useState(11);
+const Map = () => {
+    const [center, setCenter] = useRecoilState(userLocation);
+    const zoomLevel = useRecoilValue(zoom);
     const [markers, setMarkers] = useState([] as Coords[]);
     const [removeCurrentMarker, setRemoveCurrentMarker] = useRecoilState(shouldRemoveCurrentMarker);
     const [isAddingStory, setIsAddingStory] = useRecoilState(addingStoryState);
     const setShowStoryCard = useSetRecoilState(showingStoryCard);
-    
     let currentMarker = {} as Coords;
 
     const [mapOptions, setMapOptions] = useState(defaultMapOptions);
 
     function addStory(event: ClickEventValue): void {
         if (isAddingStory) {
-            const markerCoord: Coords = {
-                lat: event.lat,
-                lng: event.lng
-            };
+            const { lat, lng } = event;
+            const markerCoord: Coords = { lat, lng };
             setMarkers([
                 ...markers,
                 markerCoord
             ]);
             currentMarker = markerCoord;
             setShowStoryCard(true);
-            setCenter({lat: event.lat, lng: event.lng});
+            setCenter(markerCoord);
             setIsAddingStory(false);
         }
     }
@@ -66,9 +60,10 @@ const Map = (props: MapProperties) => {
             <GoogleMapReact
                 bootstrapURLKeys={{ key: 'AIzaSyC4NGd-0bVVXw6GwXHXhFlfh8-w9ck9S9k' }}
                 center={center}
-                zoom={zoom}
+                zoom={zoomLevel}
                 options={mapOptions}
                 onClick={addStory}
+                onDragEnd={setCenter}
                 >
                 {markers.map((marker, index) => {
                     return (<Marker 
@@ -86,6 +81,7 @@ const Map = (props: MapProperties) => {
                     </Marker>);
                 })}
             </GoogleMapReact>
+            <NavigateToLocationButton />
         </div>
     );
 }

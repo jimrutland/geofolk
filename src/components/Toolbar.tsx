@@ -1,6 +1,6 @@
 import React from 'react';
-import { IonToolbar, IonTitle, IonMenuButton, IonButtons, IonButton, IonIcon } from '@ionic/react';
-import { menu, reorderThreeSharp } from 'ionicons/icons';
+import { IonToolbar, IonTitle, IonButtons, IonIcon } from '@ionic/react';
+import { reorderThreeSharp } from 'ionicons/icons';
 interface ToolbarProps {
     openMenu(): void;
 }

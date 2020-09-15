@@ -47,3 +47,19 @@ ion-button {
 #storyText {
     margin-top: 10px;
 }
+
+#navigateButton {
+    --padding-start: 10px;
+    --padding-end: 10px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    --border-radius: 2px;
+    height: 40px;
+    position: absolute;
+    top: 62px;
+    right: 10px;
+}
+
+#navigateButton > ion-icon {
+    font-size: 20px;
+}

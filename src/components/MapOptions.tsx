@@ -82,5 +82,6 @@ export const defaultMapOptions = {
             stylers: [{ color: "#17263c" }]
         }
     ],
-    draggableCursor: ""
+    draggableCursor: "",
+    fullscreenControl: false
 } as MapOptions;

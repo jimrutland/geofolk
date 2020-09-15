@@ -1,7 +1,7 @@
 import React from 'react';
-import { IonContent, IonList, IonMenu, IonHeader, IonToolbar, IonTitle, IonIcon, IonLabel, IonItem, IonButtons, IonButton } from '@ionic/react';
+import { IonContent, IonMenu, IonIcon, IonLabel, IonButton } from '@ionic/react';
 import { addSharp } from 'ionicons/icons';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { addingStoryState } from '../RecoilStates/StoryCardState';
 
 interface ActionMenuProperties {
@@ -9,7 +9,7 @@ interface ActionMenuProperties {
 }
 
 const ActionMenu = (props: ActionMenuProperties) => {
-  const [isAddingStory, setIsAddingStory] = useRecoilState(addingStoryState);
+  const setIsAddingStory = useSetRecoilState(addingStoryState);
   function closeWindowAndEnableAddMarker() {
     props.toggleMenu();
     setIsAddingStory(true);
