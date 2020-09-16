@@ -23,5 +23,5 @@ ion-label {
 }
 
 .firebaseui-textfield.mdl-textfield .firebaseui-label:after {
-  background-color: var(--ion-color-primary) !important;
+  background-color: var(--ion-color-primary);
 }

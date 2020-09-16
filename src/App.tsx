@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {RecoilRoot } from 'recoil';
 
 /* Core CSS required for Ionic components to work properly */
@@ -20,11 +20,23 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import PageRouter from './PageRouter';
+import { firebaseConfig } from './configs/FirebaseConfig';
+import firebase from 'firebase';
 
 const App: React.FC = () => {
+  const firebaseApp = (firebase.apps.length) ? firebase.app() : firebase.initializeApp(firebaseConfig);
+  const [isSignedIn, setSignedIn] = useState(!!firebase.auth().currentUser);
+  firebaseApp.auth().onAuthStateChanged((user) => {
+    setSignedIn(!!user);
+  });
   return (
       <RecoilRoot>
-        <PageRouter />
+        <PageRouter 
+          auth={() => {
+            return firebaseApp.auth()
+          }} 
+          isSignedIn={isSignedIn}
+          setSignedIn={setSignedIn}/>
       </RecoilRoot>
     );
 }
