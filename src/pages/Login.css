@@ -1,0 +1,31 @@
+#loginContainer {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-45%, -50%);
+}
+
+ion-label {
+  font-family: 'Cinzel Decorative', cursive;
+  font-family: 'Coustard', serif;
+  font-size: 120px;
+  color: white;
+  position: relative;
+  bottom: 10px;
+}
+
+#firebaseui_container > div > form > div.firebaseui-card-actions > div > button.firebaseui-id-submit.firebaseui-button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored {
+  background-color: var(--ion-color-primary);
+}
+
+#firebaseui_container > div > form > div.firebaseui-card-actions > div > button.firebaseui-id-secondary-link.firebaseui-button.mdl-button.mdl-js-button.mdl-button--primary {
+  color: var(--ion-color-primary);
+}
+
+#firebaseui_container > div > form > div.firebaseui-card-content > div > div.firebaseui-textfield.mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.is-upgraded > label::after {
+  border-color: yellow !important;
+}
+
+.progressbar {
+  background-color: yellow !important;
+}
