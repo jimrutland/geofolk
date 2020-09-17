@@ -3,7 +3,7 @@ import GoogleMapReact, { ClickEventValue, Coords } from 'google-map-react';
 import { IonButton, IonImg } from '@ionic/react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { shouldRemoveCurrentMarker } from '../RecoilStates/MarkerState';
-import { addingStoryState, showingStoryCard } from '../RecoilStates/StoryCardState';
+import { addingStoryState, showingExistingStoryCard, showingNewStoryCard } from '../RecoilStates/StoryCardState';
 import { defaultMapOptions } from './MapOptions';
 import NavigateToLocationButton from './NavigateToLocationButton';
 import { userLocation } from '../RecoilStates/UserLocation';
@@ -24,7 +24,8 @@ const Map = () => {
     const [stories, setStories] = useState([] as Story[]);
     const [removeCurrentMarker, setRemoveCurrentMarker] = useRecoilState(shouldRemoveCurrentMarker);
     const [isAddingStory, setIsAddingStory] = useRecoilState(addingStoryState);
-    const setShowStoryCard = useSetRecoilState(showingStoryCard);
+    const setShowNewStoryCard = useSetRecoilState(showingNewStoryCard);
+    const setShowExistingStoryCard = useSetRecoilState(showingExistingStoryCard);
     const [currentStory, setCurrentStory] = useRecoilState(currentStoryState);
     const [mapOptions, setMapOptions] = useState(defaultMapOptions);
     const user = firebase.auth().currentUser;
@@ -45,14 +46,15 @@ const Map = () => {
                 newStory
             ]);
             setCurrentStory(newStory);
-            setShowStoryCard(true);
+            setShowNewStoryCard(true);
             setCenter(coordinates as Coords);
             setIsAddingStory(false);
         }
     }
 
-    function displayStoryCard(): void {
-        setShowStoryCard(true);
+    function displayStoryCard(selectedStory: Story): void {
+        setCurrentStory(selectedStory);
+        setShowExistingStoryCard(true);
     }
 
     async function onInitialLoad() {
@@ -97,7 +99,7 @@ const Map = () => {
                                 shape="round"
                                 style={{ minWidth: "40px", maxWidth: "40px" }}
                                 color="dark"
-                                onClick={displayStoryCard}>
+                                onClick={() => { displayStoryCard(story); }}>
                                 <IonImg src="assets/icon/write.png" style={{minWidth: "24px"}} />
                             </IonButton>}
                     </Marker>);

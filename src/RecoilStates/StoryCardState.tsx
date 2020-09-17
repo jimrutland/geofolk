@@ -5,7 +5,12 @@ export const addingStoryState = atom({
     default: false
 });
 
-export const showingStoryCard = atom({
-    key: 'showStoryCard',
+export const showingNewStoryCard = atom({
+    key: 'showNewStoryCard',
+    default: false
+});
+
+export const showingExistingStoryCard = atom({
+    key: 'showExistingStoryCard',
     default: false
 });

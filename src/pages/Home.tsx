@@ -6,12 +6,14 @@ import Toolbar from '../components/Toolbar';
 import ActionMenu from '../components/ActionMenu';
 import { menuController } from "@ionic/core";
 import { useRecoilValue } from 'recoil';
-import { showingStoryCard } from '../RecoilStates/StoryCardState';
-import StoryCard from '../components/StoryCard';
+import { showingExistingStoryCard, showingNewStoryCard } from '../RecoilStates/StoryCardState';
+import { currentStoryState } from '../RecoilStates/Story';
+import NewStoryCard from '../components/NewStoryCard';
+import ExistingStoryCard from '../components/ExistingStoryCard';
 
 const Home: React.FC = () => {
-  const showStoryCard = useRecoilValue(showingStoryCard);
-
+  const showNewStoryCard = useRecoilValue(showingNewStoryCard);
+  const showExistingStoryCard = useRecoilValue(showingExistingStoryCard);
   function toggleMenu() {
     menuController.toggle();
   }
@@ -24,7 +26,8 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
         <Map />
         <ActionMenu toggleMenu={toggleMenu}/>
-        { showStoryCard ? <StoryCard /> : null }
+        {(showNewStoryCard) ? <NewStoryCard /> : null}
+        {(showExistingStoryCard) ? <ExistingStoryCard /> : null}
       </IonContent>
     </IonPage>
   );

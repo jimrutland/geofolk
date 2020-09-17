@@ -2,12 +2,12 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonCardTitle, IonHeader
 import React from "react";
 import { useSetRecoilState } from "recoil";
 import { shouldRemoveCurrentMarker } from "../RecoilStates/MarkerState";
-import { showingStoryCard } from "../RecoilStates/StoryCardState";
+import { showingNewStoryCard } from "../RecoilStates/StoryCardState";
 
-const StoryCard = () => {
-    const setShowStoryCard = useSetRecoilState(showingStoryCard);
+const NewStoryCard = () => {
+    const setShowNewStoryCard = useSetRecoilState(showingNewStoryCard);
     const setRemoveCurrentMarker = useSetRecoilState(shouldRemoveCurrentMarker);
-    
+
     return (
         <IonCard id="storyCard">
           <IonHeader>
@@ -25,7 +25,7 @@ const StoryCard = () => {
               <IonButtons>
                 <IonButton slot="start" color="success"> Submit </IonButton>
                 <IonButton slot="end" onClick={() => {
-                    setShowStoryCard(false);
+                    setShowNewStoryCard(false);
                     setRemoveCurrentMarker(true);
                 }}> Cancel </IonButton>
               </IonButtons>
@@ -33,4 +33,4 @@ const StoryCard = () => {
         </IonCard>
     );
 }
-export default StoryCard;
+export default NewStoryCard;
