@@ -1,5 +1,6 @@
 import * as geofirestore from 'geofirestore';
-import { Database, DocumentInformation, Story } from "./Database";
+import { Database, DocumentInformation } from "../models/Database";
+import { Story } from '../models/Story';
 
 export class GeoDatabaseWrapper implements Database {
     private geoDb: geofirestore.GeoFirestore;
@@ -31,6 +32,9 @@ export class GeoDatabaseWrapper implements Database {
                 radius
             })
             .get();
-        return documents.docs.map(doc => doc.data() as Story);
+        return documents.docs.map(doc => {
+            const data = doc.data() as Story;
+            return new Story(data.coordinates, data.storyText, data.title, data.userId, data.g);
+        });
     }
 }

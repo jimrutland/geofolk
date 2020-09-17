@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { DragEvent, useState } from 'react';
 import GoogleMapReact, { ClickEventValue, Coords } from 'google-map-react';
 import { IonButton, IonImg } from '@ionic/react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -12,8 +12,8 @@ import { GeoDatabaseWrapper } from '../database/DatabaseWrapper';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import * as geofirestore from 'geofirestore';
-import { Story } from '../database/Database';
 import { currentStoryState } from '../RecoilStates/Story';
+import { Story } from '../models/Story';
 
 const Marker = ({ children }: any) => children;
 
@@ -38,29 +38,36 @@ const Map = () => {
 
     function addStory(event: ClickEventValue): void {
         if (isAddingStory) {
-            const coordinates = { lat: event.lat, lng: event.lng };
+            const { lat, lng } = event;
             const userId = (user) ? user.uid : "";
-            const newStory = new Story(new firebase.firestore.GeoPoint(coordinates.lat, coordinates.lng), "", "", userId, null);
+            const newStory = new Story(new firebase.firestore.GeoPoint(lat, lng), "", "", userId, null);
             setStories([
                 ...stories,
                 newStory
             ]);
             setCurrentStory(newStory);
             setShowNewStoryCard(true);
-            setCenter(coordinates as Coords);
+            setShowExistingStoryCard(false);
+            setCenter({ lat, lng });
             setIsAddingStory(false);
         }
     }
 
     function displayStoryCard(selectedStory: Story): void {
         setCurrentStory(selectedStory);
-        setShowExistingStoryCard(true);
+        const showExistingCard = !!selectedStory.g;
+        setShowExistingStoryCard(showExistingCard);
+        setShowNewStoryCard(!showExistingCard);
     }
 
     async function onInitialLoad() {
         const centerPoint = new firebase.firestore.GeoPoint(center.lat, center.lng);
         const foundStories = await db.getStoriesNearPoint("stories", centerPoint, 1000);
         setStories(foundStories);
+    }
+
+    function setDragEndCenter(event: any) {
+        setCenter({lat:event.center.lat(), lng: event.center.lng()});
     }
 
     React.useEffect(() => {
@@ -72,7 +79,7 @@ const Map = () => {
 
     React.useEffect(() => {
         if (removeCurrentMarker) {
-            setStories(stories.filter(story => story === currentStory));
+            setStories(stories.filter(story => story !== currentStory));
             setRemoveCurrentMarker(false);
         }
     }, [removeCurrentMarker]);
@@ -85,7 +92,7 @@ const Map = () => {
                 zoom={zoomLevel}
                 options={mapOptions}
                 onClick={addStory}
-                onDragEnd={setCenter}
+                onDragEnd={setDragEndCenter}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={() => onInitialLoad()}
                 >

@@ -6,8 +6,8 @@ import { showingExistingStoryCard } from "../RecoilStates/StoryCardState";
 
 const ExistingStoryCard = () => {
     const currentStory = useRecoilValue(currentStoryState);
-    const showExistingStoryCard = useSetRecoilState(showingExistingStoryCard);
-    
+    const setShowExistingStoryCard = useSetRecoilState(showingExistingStoryCard);
+
     return (
         <IonCard id="storyCard">
           <IonHeader>
@@ -22,7 +22,7 @@ const ExistingStoryCard = () => {
                   rows={8}></IonTextarea>
               </IonItem>
               <IonButtons>
-                <IonButton slot="end" onClick={() => { showExistingStoryCard(false)}}> Exit </IonButton>
+                <IonButton slot="end" onClick={() => { setShowExistingStoryCard(false)}}> Exit </IonButton>
               </IonButtons>
           </IonCardContent>        
         </IonCard>
