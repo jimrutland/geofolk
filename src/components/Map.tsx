@@ -8,37 +8,57 @@ import { defaultMapOptions } from './MapOptions';
 import NavigateToLocationButton from './NavigateToLocationButton';
 import { userLocation } from '../RecoilStates/UserLocation';
 import { zoom } from '../RecoilStates/Zoom';
+import { GeoDatabaseWrapper } from '../database/DatabaseWrapper';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+import * as geofirestore from 'geofirestore';
+import { Story } from '../database/Database';
+import { currentStoryState } from '../RecoilStates/Story';
 
 const Marker = ({ children }: any) => children;
 
 const Map = () => {
+    const db = getDatabase();
     const [center, setCenter] = useRecoilState(userLocation);
     const zoomLevel = useRecoilValue(zoom);
-    const [markers, setMarkers] = useState([] as Coords[]);
+    const [stories, setStories] = useState([] as Story[]);
     const [removeCurrentMarker, setRemoveCurrentMarker] = useRecoilState(shouldRemoveCurrentMarker);
     const [isAddingStory, setIsAddingStory] = useRecoilState(addingStoryState);
     const setShowStoryCard = useSetRecoilState(showingStoryCard);
-    let currentMarker = {} as Coords;
-
+    const [currentStory, setCurrentStory] = useRecoilState(currentStoryState);
     const [mapOptions, setMapOptions] = useState(defaultMapOptions);
+    const user = firebase.auth().currentUser;
+
+    function getDatabase() {
+        const firestore = firebase.firestore();
+        const geoFirestore = geofirestore.initializeApp(firestore);
+        return new GeoDatabaseWrapper(geoFirestore);
+    }
 
     function addStory(event: ClickEventValue): void {
         if (isAddingStory) {
-            const { lat, lng } = event;
-            const markerCoord: Coords = { lat, lng };
-            setMarkers([
-                ...markers,
-                markerCoord
+            const coordinates = { lat: event.lat, lng: event.lng };
+            const userId = (user) ? user.uid : "";
+            const newStory = new Story(new firebase.firestore.GeoPoint(coordinates.lat, coordinates.lng), "", "", userId, null);
+            setStories([
+                ...stories,
+                newStory
             ]);
-            currentMarker = markerCoord;
+            setCurrentStory(newStory);
             setShowStoryCard(true);
-            setCenter(markerCoord);
+            setCenter(coordinates as Coords);
             setIsAddingStory(false);
         }
     }
 
     function displayStoryCard(): void {
         setShowStoryCard(true);
+    }
+
+    async function onInitialLoad() {
+        const centerPoint = new firebase.firestore.GeoPoint(center.lat, center.lng);
+        const foundStories = await db.getStoriesNearPoint("stories", centerPoint, 1000);
+        setStories(foundStories);
     }
 
     React.useEffect(() => {
@@ -50,7 +70,7 @@ const Map = () => {
 
     React.useEffect(() => {
         if (removeCurrentMarker) {
-            setMarkers(markers.filter(marker => marker === currentMarker));
+            setStories(stories.filter(story => story === currentStory));
             setRemoveCurrentMarker(false);
         }
     }, [removeCurrentMarker]);
@@ -64,12 +84,14 @@ const Map = () => {
                 options={mapOptions}
                 onClick={addStory}
                 onDragEnd={setCenter}
+                yesIWantToUseGoogleMapApiInternals
+                onGoogleApiLoaded={() => onInitialLoad()}
                 >
-                {markers.map((marker, index) => {
+                {stories.map((story, index) => {
                     return (<Marker 
                                 key={index} 
-                                lat={marker.lat} 
-                                lng={marker.lng}>
+                                lat={story.coordinates.latitude} 
+                                lng={story.coordinates.longitude}>
                             {<IonButton 
                                 size="small"
                                 shape="round"

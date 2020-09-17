@@ -1,22 +1,27 @@
 import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { useState } from "react";
 import { Route } from "react-router";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import firebase from "firebase";
+import { firebaseConfig } from "./configs/FirebaseConfig";
+import 'firebase/firestore';
 
-interface PageRouterProperties {
-    auth(): firebase.auth.Auth;
-    isSignedIn: boolean;
-    setSignedIn: Dispatch<SetStateAction<boolean>>;
-}
+const PageRouter = () => {
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const [isSignedIn, setIsSignedIn] = useState(!!firebase.auth().currentUser);
+  firebase.auth().onAuthStateChanged((user: any) => {
+    setIsSignedIn(!!user);
+  });
 
-const PageRouter = (props: PageRouterProperties) => {
     return (
         <IonApp>
             <IonReactRouter>
                 <IonRouterOutlet>
-                    <Route path="/" exact={true} render={() => (props.isSignedIn) ? <Home /> : <Login auth={props.auth} />} />
+                    <Route path="/" exact={true} render={() => (isSignedIn) ? <Home /> : <Login authentication={firebase.auth} />} />
                 </IonRouterOutlet>
             </IonReactRouter>
         </IonApp>
