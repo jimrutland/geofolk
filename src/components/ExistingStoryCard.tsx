@@ -17,9 +17,8 @@ const ExistingStoryCard = () => {
               <IonItem id="storyText" color="light">
                 <IonTextarea 
                   readonly
-                  autoGrow
                   value={currentStory.storyText}
-                  rows={8}></IonTextarea>
+                  rows={10}></IonTextarea>
               </IonItem>
               <IonButtons>
                 <IonButton slot="end" onClick={() => { setShowExistingStoryCard(false)}}> Exit </IonButton>

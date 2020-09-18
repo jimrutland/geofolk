@@ -13,19 +13,19 @@ const PageRouter = () => {
     firebase.initializeApp(firebaseConfig);
   }
   const [isSignedIn, setIsSignedIn] = useState(!!firebase.auth().currentUser);
-  firebase.auth().onAuthStateChanged((user: any) => {
+  firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
     setIsSignedIn(!!user);
   });
 
-    return (
-        <IonApp>
-            <IonReactRouter>
-                <IonRouterOutlet>
-                    <Route path="/" exact={true} render={() => (isSignedIn) ? <Home /> : <Login authentication={firebase.auth} />} />
-                </IonRouterOutlet>
-            </IonReactRouter>
-        </IonApp>
-    );
+  return (
+      <IonApp>
+          <IonReactRouter>
+              <IonRouterOutlet>
+                  <Route path="/" exact={true} render={() => (isSignedIn) ? <Home /> : <Login authentication={firebase.auth} />} />
+              </IonRouterOutlet>
+          </IonReactRouter>
+      </IonApp>
+  );
 }
 
 export default PageRouter;

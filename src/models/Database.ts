@@ -10,18 +10,6 @@ export class DocumentInformation {
     }
 }
 
-export class WhereStatement {
-    public field: string;
-    public operator: string;
-    public value: string;
-
-    constructor(field: string, operator: string, value: string) {
-        this.field = field;
-        this.operator = operator;
-        this.value = value;
-    }
-}
-
 export interface Database {
     add(document: DocumentInformation, value: Story, merge: boolean): Promise<Story>;
     delete(document: DocumentInformation): Promise<void>;

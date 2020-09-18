@@ -10,7 +10,8 @@ interface ActionMenuProperties {
 
 const ActionMenu = (props: ActionMenuProperties) => {
   const setIsAddingStory = useSetRecoilState(addingStoryState);
-  function closeWindowAndEnableAddMarker() {
+  
+  function closeWindowAndEnableAddMarker(): void {
     props.toggleMenu();
     setIsAddingStory(true);
   }
